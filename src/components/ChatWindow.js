@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import './ChatWindow.css';
+
+import MessageItem from './MessageItem';
 
 import SearchIcon from '@material-ui/icons/Search';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
@@ -10,12 +12,90 @@ import CloseIcon from '@material-ui/icons/Close';
 import SendIcon from '@material-ui/icons/Send';
 import MicIcon from '@material-ui/icons/Mic';
 
-export default () => {
+export default ({user}) => {
+
+    const body = useRef();
+
+    let recognition = null;
+    let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(SpeechRecognition !== undefined){
+        recognition = new SpeechRecognition();
+    }
 
     const [emojiOpen, setEmojiOpen] = useState(false);
+    const [text, setText] = useState('');
+    const [listening, setListening] = useState(false);
+    const [list, setList] = useState([
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+        {author:123, body:'blablbal blablal'},
+        {author:123, body:'blablbalblablal'},
+        {author:1234, body:'blablbal blablal'},
+    ]);
 
-    const handleEmojiClick = ()=>{
+    useEffect(()=>{
+       if(body.current.scrollHeight > body.current.offsetHeight){
+           body.current.scrollTop = body.current.scrollHeight - body.current.offsetHeight;
+       }
+    }, [list]);
 
+    const handleEmojiClick = (e, emojiObject) =>{
+        setText(text + emojiObject.emoji);
+    }
+
+    const handleMicClick = () => {
+        if(recognition !== null){
+
+            recognition.onstart = () =>{
+                setListening(true);
+            }
+            recognition.onend = () =>{
+                setListening(false);
+            }
+            recognition.onresult = (e) => {
+                setText(e.results[0][0].transcript);
+            }
+
+            recognition.start();
+            
+        }
+    }
+    const handleSendClick = () => {
+        
     }
 
     return(
@@ -40,8 +120,12 @@ export default () => {
 
 
             </div>
-            <div className="chatWindow-body">
-                
+            <div ref={body} className="chatWindow-body">
+                {
+                    list.map((item,key)=>(
+                        <MessageItem data={item} key={key} user={user} />
+                    ))
+                }
             </div>
 
             <div className="chatWindow-emojiarea" style={{height: emojiOpen ? 200 : 0}}>
@@ -66,12 +150,23 @@ export default () => {
                     <input 
                         className="chatWindow-input" 
                         type="text"
-                        placeholder="Digite uma mensagem" />
+                        placeholder="Digite uma mensagem" 
+                        value={text}
+                        onChange={e=>setText(e.target.value)}    
+                    />
                 </div>
                 <div className="chatWindow-pos">
-                    <div className="chatWindow-btn">
-                        <SendIcon style={{color:'#919191'}} />
-                    </div>
+                    {
+                        text === ''?
+                        <div onClick={handleMicClick} className="chatWindow-btn">
+                            <MicIcon style={{color:listening? '#126ECE': '#919191'}} />
+                        </div>:
+                        <div onClick={handleSendClick} className="chatWindow-btn">
+                            <SendIcon style={{color:'#919191'}} />
+                        </div>
+                    }
+                    
+                   
                 </div>
             </div>
         </div>
