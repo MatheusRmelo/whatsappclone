@@ -9,6 +9,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import ChatListItem from './components/ChatListItem';
 import ChatIntro from './components/ChatIntro';
 import ChatWindow from './components/ChatWindow';
+import NewChat from './components/NewChat';
+
 
 export default () => {
 
@@ -25,17 +27,19 @@ export default () => {
         avatar: 'https://www.w3schools.com/w3images/avatar2.png',
         name: 'Matheus Melo'
     });
+    const [showNewChat, setShowNewChat] = useState(false);
 
     return(
         <div className="app-window">
             <div className="sidebar">
+                <NewChat show={showNewChat} setShow={setShowNewChat} user={user} chatlist={chatList} />
                 <header>
                     <img className="header-avatar" src={user.avatar} alt="Imagem do usuário" />
                     <div className="header-buttons">
                         <div className="header-btn">
                             <DonutLargeIcon style={{color: '#919191'}} />
                         </div>
-                        <div className="header-btn">
+                        <div onClick={()=>setShowNewChat(true)} className="header-btn">
                             <ChatIcon style={{color: '#919191'}} />
                         </div>
                         <div className="header-btn">
