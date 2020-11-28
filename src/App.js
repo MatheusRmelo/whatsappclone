@@ -10,7 +10,7 @@ import ChatListItem from './components/ChatListItem';
 import ChatIntro from './components/ChatIntro';
 import ChatWindow from './components/ChatWindow';
 import NewChat from './components/NewChat';
-
+import Login from './components/Login';
 
 export default () => {
 
@@ -22,12 +22,22 @@ export default () => {
 
     ]);
     const [activeChat, setActiveChat] = useState({});
-    const [user, setUser] = useState({
-        id: 1234,
-        avatar: 'https://www.w3schools.com/w3images/avatar2.png',
-        name: 'Matheus Melo'
-    });
+    const [user, setUser] = useState(null);
     const [showNewChat, setShowNewChat] = useState(false);
+
+    const handleLoginData = async (u) => {
+        let newUser = {
+            id: u.uid,
+            name: u.displayName,
+            avatar: u.photoURL
+        };
+
+        setUser(newUser);
+    }
+
+    if(user===null){
+        return(<Login onReceive={handleLoginData} />);
+    }
 
     return(
         <div className="app-window">
