@@ -12,17 +12,17 @@ import ChatWindow from './components/ChatWindow';
 import NewChat from './components/NewChat';
 import Login from './components/Login';
 
+import api from './api';
+
 export default () => {
 
-    const [chatList, setChatList] = useState([
-        {chatId:1, title: 'Fulano de tal', avatar: 'https://www.w3schools.com/w3images/avatar2.png'},
-        {chatId:2, title: 'Fulano de tal', avatar:  'https://www.w3schools.com/w3images/avatar2.png'},
-        {chatId:3, title: 'Fulano de tal', avatar:  'https://www.w3schools.com/w3images/avatar2.png'},
-        {chatId:4, title: 'Fulano de tal', avatar:  'https://www.w3schools.com/w3images/avatar2.png'},
-
-    ]);
+    const [chatList, setChatList] = useState([]);
     const [activeChat, setActiveChat] = useState({});
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({
+        id: 'EaongBEMEkVS3XvjHj1nnCENDlj1',
+        name: 'Keven Melo',
+        avatar: 'https://graph.facebook.com/208987337490148/picture'
+    });
     const [showNewChat, setShowNewChat] = useState(false);
 
     const handleLoginData = async (u) => {
@@ -31,7 +31,7 @@ export default () => {
             name: u.displayName,
             avatar: u.photoURL
         };
-
+        await api.addUser(newUser);
         setUser(newUser);
     }
 
