@@ -80,7 +80,7 @@ export default () => {
             </div>
             <div className="content-area">
                 {activeChat.chatId !== undefined
-                ?<ChatWindow user={user} />
+                ?<ChatWindow user={user} data={activeChat} />
                 : <ChatIntro />
                 }
                
