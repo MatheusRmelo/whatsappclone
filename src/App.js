@@ -39,6 +39,13 @@ export default () => {
         return(<Login onReceive={handleLoginData} />);
     }
 
+    useEffect(()=>{
+        if(user!==null){
+            let unsub = api.onChatList(user.id, setChatList);
+            return unsub;
+        }
+    }, [user]);
+
     return(
         <div className="app-window">
             <div className="sidebar">
