@@ -18,11 +18,7 @@ export default () => {
 
     const [chatList, setChatList] = useState([]);
     const [activeChat, setActiveChat] = useState({});
-    const [user, setUser] = useState({
-        id: 'EaongBEMEkVS3XvjHj1nnCENDlj1',
-        name: 'Keven Melo',
-        avatar: 'https://graph.facebook.com/208987337490148/picture'
-    });
+    const [user, setUser] = useState(null);
     const [showNewChat, setShowNewChat] = useState(false);
 
     const handleLoginData = async (u) => {
