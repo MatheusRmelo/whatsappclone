@@ -21,6 +21,13 @@ export default () => {
     const [user, setUser] = useState(null);
     const [showNewChat, setShowNewChat] = useState(false);
 
+    useEffect(()=>{
+        if(user!==null){
+            let unsub = api.onChatList(user.id, setChatList);
+            return unsub;
+        }
+    }, [user]);
+
     const handleLoginData = async (u) => {
         let newUser = {
             id: u.uid,
@@ -35,12 +42,7 @@ export default () => {
         return(<Login onReceive={handleLoginData} />);
     }
 
-    useEffect(()=>{
-        if(user!==null){
-            let unsub = api.onChatList(user.id, setChatList);
-            return unsub;
-        }
-    }, [user]);
+    
 
     return(
         <div className="app-window">
